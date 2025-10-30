@@ -9,13 +9,22 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<LeagueMembers> LeagueMembers { get; set; } = null!;
+    public DbSet<TeamData> TeamData { get; set; } = null!;
+    public DbSet<Transactions> Transactions { get; set; } = null!;
+    public DbSet<GameData> GameData { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<LeagueMembers>()
             .ToTable("League_Members");
 
-        modelBuilder.Entity<LeagueMembers>()
-            .HasKey(lm => lm.Id);
+        modelBuilder.Entity<TeamData>()
+            .ToTable("Team_Data");
+
+        modelBuilder.Entity<Transactions>()
+            .ToTable("Transactions");
+
+        modelBuilder.Entity<GameData>()
+            .ToTable("Game_Data");
     }
 }
