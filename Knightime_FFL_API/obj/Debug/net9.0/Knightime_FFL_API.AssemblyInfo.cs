@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Knightime_FFL_API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+87f05fd33f151f9ec47d41d163ad77c33d09449c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+337de68d6c70fce557555446c32e6bee232f346c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Knightime_FFL_API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Knightime_FFL_API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

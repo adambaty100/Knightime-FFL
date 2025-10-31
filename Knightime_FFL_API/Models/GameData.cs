@@ -27,5 +27,5 @@ public class GameData
     public int Year { get; set; }
 
     [Column("week")]
-    public int Week { get; set; }
+    public string? Week { get; set; }
 }
