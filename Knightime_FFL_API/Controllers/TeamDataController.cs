@@ -24,7 +24,7 @@ namespace Knightime_FFL_API.Controllers
 
             if (!teamData.Any())
             {
-                return NotFound($"No team data found");
+                return NotFound("No team data found");
             }
             
             return Ok(teamData);

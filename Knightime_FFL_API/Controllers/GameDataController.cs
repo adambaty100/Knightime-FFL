@@ -21,6 +21,12 @@ namespace Knightime_FFL_API.Controllers
         public async Task<IActionResult> GetGameData()
         {
             var gameData = await _context.GameData.ToListAsync();
+
+            if (!gameData.Any())
+            {
+                return NotFound("No game data found");
+            }
+            
             return Ok(gameData);
         }
 

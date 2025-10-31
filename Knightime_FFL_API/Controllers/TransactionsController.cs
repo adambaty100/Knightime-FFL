@@ -21,6 +21,12 @@ namespace Knightime_FFL_API.Controllers
         public async Task<IActionResult> GetTransactions()
         {
             var transactions = await _context.Transactions.ToListAsync();
+
+            if (!transactions.Any())
+            {
+                return NotFound("No transactions found");
+            }
+
             return Ok(transactions);
         }
 
