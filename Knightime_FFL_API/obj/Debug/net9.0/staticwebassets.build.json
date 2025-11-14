@@ -1,12 +1,1 @@
-{
-  "Version": 1,
-  "Hash": "cGyTGIp+1EEM2Wy3Bbt+7tUn4XdmZkD6gzPD5UfVCoI=",
-  "Source": "Knightime_FFL_API",
-  "BasePath": "_content/Knightime_FFL_API",
-  "Mode": "Default",
-  "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
-}
+{"Version":1,"Hash":"YdO/OSi9OOcvx7hmXUMNN4hSuePoMJEUnX4girT7JPo=","Source":"Knightime_FFL_API","BasePath":"/","Mode":"Root","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}

@@ -5,15 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
     selector: 'league-members',
     imports: [],
-    // templateUrl: './leaguemembers.html',
     styleUrl: './leaguemembers.css',
-    template: `
-        <p>League Members works!</p>
-        <pre>
-          {{ leagueMembersJson() }}
-        </pre
-        >
-    `,
+    templateUrl: './leaguemembers.html',
 })
 export class LeagueMembers {
     private route = inject(ActivatedRoute);
