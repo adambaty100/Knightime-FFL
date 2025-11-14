@@ -1,0 +1,83 @@
+<div class="data-section">
+    <div class="section-header">
+        <div class="section-title">All-Time Team Records</div>
+        <div class="filters-wrapper">
+            <div class="filters">
+                <button class="filter-btn" [class.active]="activeFilter === 'All Time'" (click)="onFilterClick('All Time')">All Time</button>
+                <button *ngFor="let year of availableYears" class="filter-btn" [class.active]="activeFilter === year.toString()" (click)="onFilterClick(year.toString())">{{ year }}</button>
+            </div>
+        </div>
+    </div>
+    
+    <div *ngIf="isLoading" class="loading">Loading team data...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+    
+    <div class="table-container" *ngIf="!isLoading && !error">
+        <table>
+            <thead>
+                <tr>
+                    <th (click)="onSort('rank')" class="sortable" [class.active]="sortColumn === 'rank'">
+                        Rank
+                        <span *ngIf="sortColumn === 'rank'" class="sort-indicator">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                    <th (click)="onSort('team')" class="sortable" [class.active]="sortColumn === 'team'">
+                        Team
+                        <span *ngIf="sortColumn === 'team'" class="sort-indicator">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                    <th (click)="onSort('leagueMember')" class="sortable" [class.active]="sortColumn === 'leagueMember'">
+                        League Member
+                        <span *ngIf="sortColumn === 'leagueMember'" class="sort-indicator">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                    <th (click)="onSort('wins')" class="sortable" [class.active]="sortColumn === 'wins'">
+                        Wins
+                        <span *ngIf="sortColumn === 'wins'" class="sort-indicator">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                    <th (click)="onSort('losses')" class="sortable" [class.active]="sortColumn === 'losses'">
+                        Losses
+                        <span *ngIf="sortColumn === 'losses'" class="sort-indicator">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                    <th (click)="onSort('winPercentage')" class="sortable" [class.active]="sortColumn === 'winPercentage'">
+                        Win %
+                        <span *ngIf="sortColumn === 'winPercentage'" class="sort-indicator">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                    <th (click)="onSort('pointsFor')" class="sortable" [class.active]="sortColumn === 'pointsFor'">
+                        Points For
+                        <span *ngIf="sortColumn === 'pointsFor'" class="sort-indicator">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                    <th (click)="onSort('pointsAgainst')" class="sortable" [class.active]="sortColumn === 'pointsAgainst'">
+                        Points Against
+                        <span *ngIf="sortColumn === 'pointsAgainst'" class="sort-indicator">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                    <th *ngIf="activeFilter === 'All Time'" (click)="onSort('championships')" class="sortable" [class.active]="sortColumn === 'championships'">
+                        Championships
+                        <span *ngIf="sortColumn === 'championships'" class="sort-indicator">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                    <th (click)="onSort('status')" class="sortable" [class.active]="sortColumn === 'status'">
+                        Status
+                        <span *ngIf="sortColumn === 'status'" class="sort-indicator">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let team of teams">
+                    <td>{{ team.rank }}</td>
+                    <td>
+                        <div class="team-cell">
+                            <div class="team-avatar">{{ team.avatar }}</div>
+                            <span>{{ team.name }}</span>
+                            <span *ngIf="team.isChampion" class="champion-crown" title="Champion">👑</span>
+                        </div>
+                    </td>
+                    <td class="league-member-cell">{{ team.leagueMemberName || 'Loading...' }}</td>
+                    <td>{{ team.wins }}</td>
+                    <td>{{ team.losses }}</td>
+                    <td>{{ team.winPercentage }}</td>
+                    <td>{{ team.pointsFor }}</td>
+                    <td>{{ team.pointsAgainst }}</td>
+                    <td *ngIf="activeFilter === 'All Time'">{{ team.championships }}</td>
+                    <td><span class="badge" [ngClass]="{'champion': team.status.text === 'Champion', 'active': team.status.text === 'Active', 'inactive': team.status.text === 'Inactive', 'playoff': team.status.type === 'playoff' && team.status.text !== 'Champion'}">{{ team.status.text }}</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

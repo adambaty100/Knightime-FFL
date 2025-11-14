@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<TeamData> TeamData { get; set; } = null!;
     public DbSet<Transactions> Transactions { get; set; } = null!;
     public DbSet<GameData> GameData { get; set; } = null!;
+    public DbSet<Champions> Champions { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,5 +27,8 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<GameData>()
             .ToTable("Game_Data");
+
+        modelBuilder.Entity<Champions>()
+            .ToTable("Champions");
     }
 }

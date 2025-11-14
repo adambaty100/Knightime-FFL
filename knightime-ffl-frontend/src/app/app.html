@@ -300,8 +300,6 @@
             background: #dbeafe;
             color: #1e40af;
         }
-
-        /* Mobile Menu Toggle */
         .menu-toggle {
             display: none;
             position: fixed;
@@ -427,109 +425,7 @@
                 </div>
             </div>
 
-            <div class="data-section">
-                <div class="section-header">
-                    <div class="section-title">All-Time Team Records</div>
-                    <div class="filters">
-                        <button class="filter-btn active">All Time</button>
-                        <button class="filter-btn">2024</button>
-                        <button class="filter-btn">2023</button>
-                    </div>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>Team</th>
-                                <th>Wins</th>
-                                <th>Losses</th>
-                                <th>Win %</th>
-                                <th>Points For</th>
-                                <th>Championships</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>
-                                    <div class="team-cell">
-                                        <div class="team-avatar">JD</div>
-                                        <span>John's Destroyers</span>
-                                    </div>
-                                </td>
-                                <td>87</td>
-                                <td>45</td>
-                                <td>65.9%</td>
-                                <td>13,247</td>
-                                <td>2</td>
-                                <td><span class="badge champion">Champion '23</span></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>
-                                    <div class="team-cell">
-                                        <div class="team-avatar">MK</div>
-                                        <span>Mike's Kings</span>
-                                    </div>
-                                </td>
-                                <td>81</td>
-                                <td>51</td>
-                                <td>61.4%</td>
-                                <td>12,895</td>
-                                <td>3</td>
-                                <td><span class="badge playoff">Playoff</span></td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>
-                                    <div class="team-cell">
-                                        <div class="team-avatar">SA</div>
-                                        <span>Sarah's Aces</span>
-                                    </div>
-                                </td>
-                                <td>79</td>
-                                <td>53</td>
-                                <td>59.8%</td>
-                                <td>12,654</td>
-                                <td>1</td>
-                                <td><span class="badge playoff">Playoff</span></td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>
-                                    <div class="team-cell">
-                                        <div class="team-avatar">RW</div>
-                                        <span>Ryan's Warriors</span>
-                                    </div>
-                                </td>
-                                <td>75</td>
-                                <td>57</td>
-                                <td>56.8%</td>
-                                <td>12,321</td>
-                                <td>1</td>
-                                <td><span class="badge playoff">Playoff</span></td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>
-                                    <div class="team-cell">
-                                        <div class="team-avatar">LC</div>
-                                        <span>Laura's Crusaders</span>
-                                    </div>
-                                </td>
-                                <td>71</td>
-                                <td>61</td>
-                                <td>53.8%</td>
-                                <td>11,987</td>
-                                <td>1</td>
-                                <td><span class="badge playoff">Playoff</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <app-team-records></app-team-records>
         </main>
     </div>
 

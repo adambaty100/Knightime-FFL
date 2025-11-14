@@ -1,5 +1,47 @@
 [
   {
+    "ContainingType": "Knightime_FFL_API.Controllers.ChampionsController",
+    "Method": "GetChampions",
+    "RelativePath": "Champions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Knightime_FFL_API.Controllers.ChampionsController",
+    "Method": "GetChampionshipsByLeagueMember",
+    "RelativePath": "Champions/member/{leagueMemberId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "leagueMemberId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Knightime_FFL_API.Controllers.ChampionsController",
+    "Method": "GetChampionByYear",
+    "RelativePath": "Champions/year/{year}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Knightime_FFL_API.Controllers.GameDataController",
     "Method": "GetGameData",
     "RelativePath": "GameData",
