@@ -5,21 +5,16 @@
     <app-stat-card 
         label="Total Teams"
         [value]="stats.totalTeams"
-        change="↑ Active"
-        [isPositive]="true"
         (click)="navigateTo('teams')">
     </app-stat-card>
     <app-stat-card 
         label="Total Games Played"
         [value]="stats.totalGamesPlayed"
-        change="Since 2015"
         (click)="navigateTo('games')">
     </app-stat-card>
     <app-stat-card 
         label="Total Transactions"
         [value]="stats.totalTransactions"
-        change="↑ 234 this season"
-        [isPositive]="true"
         (click)="navigateTo('transactions')">
     </app-stat-card>
 </div>

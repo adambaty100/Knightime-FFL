@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs';
 
 interface NavItem {
   icon: string;
@@ -20,7 +21,7 @@ interface NavSection {
   templateUrl: './nav.html',
   styleUrl: './nav.css'
 })
-export class NavComponent {
+export class NavComponent implements OnInit {
   navSections: NavSection[] = [
     {
       title: '', 
@@ -56,6 +57,30 @@ export class NavComponent {
   activeItem: string = 'Home';
 
   constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    // Set initial active item based on current route
+    this.updateActiveItemFromRoute(this.router.url);
+
+    // Listen for route changes and update active item
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.updateActiveItemFromRoute(event.url);
+      });
+  }
+
+  private updateActiveItemFromRoute(url: string): void {
+    // Find the nav item that matches the current route
+    for (const section of this.navSections) {
+      for (const item of section.items) {
+        if (item.route === url) {
+          this.activeItem = item.label;
+          return;
+        }
+      }
+    }
+  }
 
   onNavItemClick(label: string, route: string): void {
     this.activeItem = label;

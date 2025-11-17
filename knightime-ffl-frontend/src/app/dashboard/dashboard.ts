@@ -48,11 +48,23 @@ export class DashboardComponent implements OnInit {
       this.http.get<any[]>(`${this.apiUrl}/transactions`)
     ]).subscribe({
       next: ([teamData, gameData, championsData, transactionsData]) => {
+        const uniqueTeams = new Set(teamData.map((t: any) => t.leagueMemberId)).size;
+        const totalGames = gameData.length;
+        const totalChamps = championsData.length;
+        const totalTrans = transactionsData.length;
+
+        console.log('Dashboard Stats:', { 
+          totalTeams: uniqueTeams, 
+          totalGamesPlayed: totalGames, 
+          totalChampionships: totalChamps, 
+          totalTransactions: totalTrans 
+        });
+
         this.stats = {
-          totalTeams: new Set(teamData.map((t: any) => t.leagueMemberId)).size,
-          totalGamesPlayed: gameData.length,
-          totalChampionships: championsData.length,
-          totalTransactions: transactionsData.length
+          totalTeams: uniqueTeams,
+          totalGamesPlayed: totalGames,
+          totalChampionships: totalChamps,
+          totalTransactions: totalTrans
         };
         this.isLoading = false;
       },
