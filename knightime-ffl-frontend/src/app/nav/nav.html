@@ -1,0 +1,13 @@
+<nav>
+    <div class="nav-section" *ngFor="let section of navSections">
+        <div class="nav-section-title" *ngIf="section.title">{{ section.title }}</div>
+        <div 
+            class="nav-item" 
+            *ngFor="let item of section.items"
+            [class.active]="activeItem === item.label"
+            (click)="onNavItemClick(item.label, item.route)">
+            <span class="nav-icon">{{ item.icon }}</span>
+            <span>{{ item.label }}</span>
+        </div>
+    </div>
+</nav>

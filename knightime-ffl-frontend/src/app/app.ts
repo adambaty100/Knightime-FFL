@@ -1,14 +1,11 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { TeamRecordsComponent } from './team-records/team-records';
-import { StatCardComponent } from './stat-card/stat-card';
+import { Component } from '@angular/core';
+import { RouterOutlet, RouterLink } from '@angular/router';
+import { NavComponent } from './nav/nav';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TeamRecordsComponent, StatCardComponent],
+  imports: [RouterOutlet, RouterLink, NavComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('knightime-ffl-frontend');
-}
+export class App {}

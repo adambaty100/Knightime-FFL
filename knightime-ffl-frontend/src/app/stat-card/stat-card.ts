@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -13,4 +13,9 @@ export class StatCardComponent {
   @Input() value: string | number = 0;
   @Input() change: string = '';
   @Input() isPositive: boolean = false;
+  @Output() cardClick = new EventEmitter<void>();
+
+  onClick(): void {
+    this.cardClick.emit();
+  }
 }
