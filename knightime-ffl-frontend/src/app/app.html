@@ -138,48 +138,6 @@
             margin-bottom: 2rem;
         }
 
-        .stat-card {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            border-color: #f97316;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(249, 115, 22, 0.15);
-        }
-
-        .stat-label {
-            font-size: 0.875rem;
-            color: #6b7280;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #e4e6eb;
-        }
-
-        .stat-change {
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
-        .stat-change.positive {
-            color: #10b981;
-        }
-
-        .stat-change.negative {
-            color: #ef4444;
-        }
-
         /* Data Table */
         .data-section {
             background: #1a1a1a;
@@ -403,26 +361,28 @@
             </div>
 
             <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Total Teams</div>
-                    <div class="stat-value">12</div>
-                    <div class="stat-change positive">↑ Active</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Total Games Played</div>
-                    <div class="stat-value">1,247</div>
-                    <div class="stat-change">Since 2015</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Championships</div>
-                    <div class="stat-value">9</div>
-                    <div class="stat-change">9 Seasons</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Total Transactions</div>
-                    <div class="stat-value">2,834</div>
-                    <div class="stat-change positive">↑ 234 this season</div>
-                </div>
+                <app-stat-card 
+                    label="Total Teams"
+                    value="12"
+                    change="↑ Active"
+                    [isPositive]="true">
+                </app-stat-card>
+                <app-stat-card 
+                    label="Total Games Played"
+                    value="1,247"
+                    change="Since 2015">
+                </app-stat-card>
+                <app-stat-card 
+                    label="Championships"
+                    value="9"
+                    change="9 Seasons">
+                </app-stat-card>
+                <app-stat-card 
+                    label="Total Transactions"
+                    value="2,834"
+                    change="↑ 234 this season"
+                    [isPositive]="true">
+                </app-stat-card>
             </div>
 
             <app-team-records></app-team-records>
