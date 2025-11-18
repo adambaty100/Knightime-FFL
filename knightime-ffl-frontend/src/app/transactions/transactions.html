@@ -1,0 +1,68 @@
+<div class="transactions-container">
+    <div *ngIf="isLoading" class="loading">Loading transactions...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+
+    <div *ngIf="!isLoading && !error" class="content">
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <div class="filter-group">
+                <label>Filter by League Member:</label>
+                <select (change)="onMemberFilter($event)">
+                    <option [value]="null">All Members</option>
+                    <option *ngFor="let member of leaguemembers" [value]="member.id">
+                        {{ member.leagueMember }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Filter by Year:</label>
+                <select (change)="onYearFilter($event)">
+                    <option [value]="null">All Years</option>
+                    <option *ngFor="let year of availableYears" [value]="year">
+                        {{ year }}
+                    </option>
+                </select>
+            </div>
+
+            <button *ngIf="activeFilterCount > 0" class="clear-btn" (click)="clearFilters()">
+                Clear Filters ({{ activeFilterCount }})
+            </button>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="section">
+            <h3>Transactions ({{ filteredTransactions.length }})</h3>
+            <div class="table-container" *ngIf="filteredTransactions.length > 0">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Week</th>
+                            <th>League Member</th>
+                            <th>Player Name</th>
+                            <th>Transaction Type</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let transaction of filteredTransactions" [class]="'type-' + getTransactionTypeClass(transaction.transactionType)">
+                            <td>{{ transaction.year }}</td>
+                            <td>{{ transaction.week }}</td>
+                            <td class="member-name">{{ transaction.leagueMemberName }}</td>
+                            <td>{{ transaction.playerName }}</td>
+                            <td class="transaction-type">
+                                <span class="type-badge">{{ transaction.transactionType }}</span>
+                            </td>
+                            <td class="notes">{{ transaction.notes || '-' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="no-data" *ngIf="filteredTransactions.length === 0">
+                <p>No transactions found for the selected filters</p>
+            </div>
+        </div>
+    </div>
+</div>
