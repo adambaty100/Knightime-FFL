@@ -1,0 +1,162 @@
+.game-data-container {
+    padding: 0;
+}
+
+.loading {
+    padding: 2rem;
+    text-align: center;
+    color: #9ca3af;
+}
+
+.error {
+    padding: 2rem;
+    text-align: center;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 8px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.section {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.section h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #e4e6eb;
+}
+
+.member-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.member-btn,
+.year-btn {
+    padding: 0.75rem 1rem;
+    background: #2a2a2a;
+    border: 2px solid #3a3a3a;
+    border-radius: 8px;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+}
+
+.member-btn:hover,
+.year-btn:hover {
+    background: #3a3a3a;
+    color: #e4e6eb;
+    border-color: #4a4a4a;
+}
+
+.member-btn.active,
+.year-btn.active {
+    background: #f97316;
+    border-color: #f97316;
+    color: white;
+}
+
+.year-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.year-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #0d0d0d;
+}
+
+th {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+td {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #2a2a2a;
+    font-size: 0.9375rem;
+}
+
+tbody tr {
+    transition: background 0.2s ease;
+}
+
+tbody tr:hover {
+    background: #2a2a2a;
+}
+
+.result-badge {
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    display: inline-block;
+    min-width: 3rem;
+    text-align: center;
+}
+
+tbody tr.result-win .result-badge {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+tbody tr.result-loss .result-badge {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+tbody tr.result-tie .result-badge {
+    background: rgba(156, 163, 175, 0.2);
+    color: #d1d5db;
+}
+
+.no-data {
+    text-align: center;
+    color: #6b7280;
+    padding: 2rem 0;
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding: 1rem;
+    }
+
+    .member-grid {
+        grid-template-columns: 1fr;
+    }
+
+    th, td {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+    }
+}

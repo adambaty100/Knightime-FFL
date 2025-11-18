@@ -1,0 +1,65 @@
+<div class="game-data-container">
+    <div *ngIf="isLoading" class="loading">Loading game data...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+
+    <div *ngIf="!isLoading && !error" class="content">
+        <!-- League Member Selection -->
+        <div class="section">
+            <h3>Select a League Member</h3>
+            <div class="member-grid">
+                <button 
+                    *ngFor="let member of leagueMemberTeams"
+                    class="member-btn"
+                    [class.active]="selectedMemberId === member.leagueMemberId"
+                    (click)="onMemberSelect(member.leagueMemberId)">
+                    {{ member.name }}
+                </button>
+            </div>
+        </div>
+
+        <!-- Year Selection -->
+        <div class="section" *ngIf="selectedMemberId !== null">
+            <h3>Select a Year</h3>
+            <div class="year-buttons">
+                <button 
+                    *ngFor="let year of availableYears"
+                    class="year-btn"
+                    [class.active]="selectedYear === year"
+                    (click)="onYearSelect(year)">
+                    {{ year }}
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Data Table -->
+        <div class="section" *ngIf="selectedMemberId !== null && selectedYear && gameRecords.length > 0">
+            <h3>{{ getMemberName(selectedMemberId) }} - {{ selectedYear }} Season</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Week</th>
+                            <th>Result</th>
+                            <th>Points For</th>
+                            <th>Points Against</th>
+                            <th>Opponent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let game of gameRecords" [class]="'result-' + getResultClass(game.result)">
+                            <td>{{ game.week }}</td>
+                            <td class="result-badge">{{ game.result }}</td>
+                            <td>{{ game.pointsFor }}</td>
+                            <td>{{ game.pointsAgainst }}</td>
+                            <td>{{ game.opponent }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section" *ngIf="selectedMemberId !== null && selectedYear && gameRecords.length === 0">
+            <p class="no-data">No games found for this selection</p>
+        </div>
+    </div>
+</div>
