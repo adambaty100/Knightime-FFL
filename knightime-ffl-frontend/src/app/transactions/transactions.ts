@@ -1,26 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { forkJoin } from 'rxjs';
-import { timeout } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { forkJoin, timeout, catchError } from 'rxjs';
+import { of } from 'rxjs';
 
 interface Transaction {
   id: number;
   leagueMemberId: number;
-  playerName: string;
-  transactionType: string;
+  trades: number;
+  acquisitions: number;
+  drops: number;
+  activations: number;
+  ir: number;
   year: number;
-  week: string;
-  notes: string;
 }
 
 interface LeagueMember {
   id: number;
-  leagueMember: string;
-  experience: number;
+  name?: string;
+  leagueMember?: string;
+  experience?: number;
 }
 
-interface DisplayTransaction extends Transaction {
+interface TransactionDisplay extends Transaction {
   leagueMemberName: string;
 }
 
@@ -32,20 +34,19 @@ interface DisplayTransaction extends Transaction {
   styleUrl: './transactions.css'
 })
 export class TransactionsComponent implements OnInit {
-  allTransactions: DisplayTransaction[] = [];
-  filteredTransactions: DisplayTransaction[] = [];
+  transactions: TransactionDisplay[] = [];
+  filteredTransactions: TransactionDisplay[] = [];
+  leagueMembers: LeagueMember[] = [];
+  years: number[] = [];
   
-  leaguemembers: LeagueMember[] = [];
-  availableYears: number[] = [];
-  
-  selectedMemberId: number | null = null;
+  selectedMember: number | null = null;
   selectedYear: number | null = null;
   
-  isLoading: boolean = true;
+  isLoading = true;
   error: string | null = null;
 
   private apiUrl = 'https://localhost:44372';
-  private leagueMemberCache = new Map<number, string>();
+  private leagueMembersCache: Map<number, string> = new Map();
 
   constructor(private http: HttpClient) {}
 
@@ -53,140 +54,114 @@ export class TransactionsComponent implements OnInit {
     this.loadData();
   }
 
-  loadData(): void {
+  private loadData(): void {
     this.isLoading = true;
     this.error = null;
 
-    console.log('Loading transactions from:', this.apiUrl);
-
     forkJoin([
-      this.http.get<Transaction[]>(`${this.apiUrl}/transactions`).pipe(timeout(10000)),
-      this.http.get<LeagueMember[]>(`${this.apiUrl}/leaguemembers`).pipe(timeout(10000))
+      this.http.get<Transaction[]>(`${this.apiUrl}/transactions`).pipe(
+        timeout(10000),
+        catchError(err => {
+          console.error('Error loading transactions:', err);
+          return of([]);
+        })
+      ),
+      this.http.get<LeagueMember[]>(`${this.apiUrl}/leaguemembers`).pipe(
+        timeout(10000),
+        catchError(err => {
+          console.error('Error loading league members:', err);
+          return of([]);
+        })
+      )
     ]).subscribe({
-      next: ([transactionsData, membersData]) => {
-        console.log('Transactions loaded:', transactionsData.length);
-        console.log('Members loaded:', membersData.length);
+      next: ([transactionData, memberData]) => {
+        console.log('Transactions loaded:', transactionData);
+        console.log('League members loaded:', memberData);
+        console.log('Member data sample:', memberData[0]);
         
-        this.leaguemembers = membersData.sort((a, b) => a.leagueMember.localeCompare(b.leagueMember));
-        
-        // Cache league member names
-        membersData.forEach(member => {
-          this.leagueMemberCache.set(member.id, member.leagueMember);
+        // Cache league member names (ensure IDs are numbers)
+        memberData.forEach(member => {
+          // Try both 'name' and 'leagueMember' property names
+          const memberName = member.name || member.leagueMember || 'Unknown';
+          console.log(`Caching member ${member.id}:`, memberName);
+          this.leagueMembersCache.set(Number(member.id), memberName);
         });
 
-        // Add league member names to transactions
-        this.allTransactions = transactionsData.map(t => ({
-          ...t,
-          leagueMemberName: this.leagueMemberCache.get(t.leagueMemberId) || 'Unknown'
-        }));
+        // Map transaction data with league member names (ensure IDs are numbers)
+        this.transactions = transactionData.map(t => {
+          const name = this.leagueMembersCache.get(Number(t.leagueMemberId)) || 'Unknown Member';
+          console.log(`Transaction ${t.id}: memberId=${t.leagueMemberId}, name=${name}`);
+          return {
+            ...t,
+            leagueMemberName: name
+          };
+        });
 
-        this.extractAvailableYears();
+        // Extract unique years and sort descending
+        this.years = [...new Set(this.transactions.map(t => t.year))].sort((a, b) => b - a);
+
+        // Extract unique league members and sort by name
+        this.leagueMembers = memberData.sort((a, b) => {
+          const nameA = a.name || a.leagueMember || '';
+          const nameB = b.name || b.leagueMember || '';
+          return nameA.localeCompare(nameB);
+        });
+
         this.applyFilters();
         this.isLoading = false;
-        console.log('Loading complete');
       },
       error: (err) => {
-        console.error('Error loading transactions:', err);
-        this.error = 'Failed to load transactions: ' + (err.message || 'Unknown error');
+        console.error('Error loading data:', err);
+        this.error = 'Failed to load transactions';
         this.isLoading = false;
       }
     });
   }
 
-  private extractAvailableYears(): void {
-    const years = new Set(this.allTransactions.map(t => t.year));
-    this.availableYears = Array.from(years).sort((a, b) => b - a);
-  }
-
   onMemberFilter(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    this.selectedMemberId = target.value ? parseInt(target.value) : null;
+    const value = (event.target as HTMLSelectElement).value;
+    this.selectedMember = value ? parseInt(value) : null;
     this.applyFilters();
   }
 
   onYearFilter(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    this.selectedYear = target.value ? parseInt(target.value) : null;
+    const value = (event.target as HTMLSelectElement).value;
+    this.selectedYear = value ? parseInt(value) : null;
     this.applyFilters();
   }
 
-  private applyFilters(): void {
-    let filtered = [...this.allTransactions];
-
-    if (this.selectedMemberId !== null) {
-      filtered = filtered.filter(t => t.leagueMemberId === this.selectedMemberId);
-    }
-
-    if (this.selectedYear !== null) {
-      filtered = filtered.filter(t => t.year === this.selectedYear);
-    }
-
-    // Sort by year descending, then by week
-    filtered.sort((a, b) => {
-      if (a.year !== b.year) {
-        return b.year - a.year;
-      }
-      return this.compareWeeks(a.week, b.week);
-    });
-
-    this.filteredTransactions = filtered;
-  }
-
-  private compareWeeks(weekA: string, weekB: string): number {
-    // Handle undefined/null values
-    if (!weekA && !weekB) return 0;
-    if (!weekA) return 1;
-    if (!weekB) return -1;
-
-    // Extract week number for regular weeks
-    const weekAMatch = weekA.match(/^(\d+)$/);
-    const weekBMatch = weekB.match(/^(\d+)$/);
-    
-    // Check if they are Rd (round) games
-    const isRdA = weekA.toLowerCase().startsWith('rd');
-    const isRdB = weekB.toLowerCase().startsWith('rd');
-
-    // If both are regular weeks, sort numerically
-    if (weekAMatch && weekBMatch) {
-      return parseInt(weekAMatch[1]) - parseInt(weekBMatch[1]);
-    }
-
-    // If one is Rd and other is a week, weeks come first
-    if (isRdA && !isRdB) return 1;
-    if (!isRdA && isRdB) return -1;
-
-    // If both are Rd games, sort by the number after "Rd"
-    if (isRdA && isRdB) {
-      const rdAMatch = weekA.match(/rd\s*(\d+)/i);
-      const rdBMatch = weekB.match(/rd\s*(\d+)/i);
-      const rdANum = rdAMatch ? parseInt(rdAMatch[1]) : 0;
-      const rdBNum = rdBMatch ? parseInt(rdBMatch[1]) : 0;
-      return rdANum - rdBNum;
-    }
-
-    // Fallback to string comparison
-    return weekA.localeCompare(weekB);
-  }
-
-  getTransactionTypeClass(type: string): string {
-    const lower = type.toLowerCase();
-    if (lower.includes('add') || lower.includes('claim')) return 'add';
-    if (lower.includes('drop') || lower.includes('release')) return 'drop';
-    if (lower.includes('trade')) return 'trade';
-    if (lower.includes('waiver')) return 'waiver';
-    return 'other';
-  }
-
   clearFilters(): void {
-    this.selectedMemberId = null;
+    this.selectedMember = null;
     this.selectedYear = null;
     this.applyFilters();
   }
 
-  get activeFilterCount(): number {
+  private applyFilters(): void {
+    this.filteredTransactions = this.transactions.filter(t => {
+      const memberMatch = !this.selectedMember || t.leagueMemberId === this.selectedMember;
+      const yearMatch = !this.selectedYear || t.year === this.selectedYear;
+      return memberMatch && yearMatch;
+    }).sort((a, b) => {
+      // Sort by year descending, then by league member name
+      if (a.year !== b.year) {
+        return b.year - a.year;
+      }
+      const nameA = a.leagueMemberName || '';
+      const nameB = b.leagueMemberName || '';
+      return nameA.localeCompare(nameB);
+    });
+  }
+
+  getActiveFilterCount(): number {
     let count = 0;
-    if (this.selectedMemberId !== null) count++;
-    if (this.selectedYear !== null) count++;
+    if (this.selectedMember) count++;
+    if (this.selectedYear) count++;
     return count;
+  }
+
+  getTotalTransactions(): number {
+    return this.filteredTransactions.reduce((sum, t) => {
+      return sum + t.trades + t.acquisitions + t.drops + t.activations + t.ir;
+    }, 0);
   }
 }
