@@ -49,9 +49,16 @@ export class DashboardComponent implements OnInit {
     ]).subscribe({
       next: ([teamData, gameData, championsData, transactionsData]) => {
         const uniqueTeams = new Set(teamData.map((t: any) => t.leagueMemberId)).size;
-        const totalGames = gameData.length;
+        const totalGames = Math.round(gameData.length / 2); // Each game has two entries
         const totalChamps = championsData.length;
-        const totalTrans = transactionsData.length;
+        
+        // Calculate total transactions by summing all transaction types
+        const totalTrans = transactionsData.reduce((sum: number, t: any) => {
+          return sum + (t.trades || 0) + (t.acquisitions || 0) + (t.drops || 0) + (t.activations || 0) + (t.ir || 0);
+        }, 0);
+
+        console.log('Total games:', totalGames);
+        console.log('Total Transactions:', totalTrans);
 
         console.log('Dashboard Stats:', { 
           totalTeams: uniqueTeams, 

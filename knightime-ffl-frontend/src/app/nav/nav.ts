@@ -37,21 +37,21 @@ export class NavComponent implements OnInit {
         { icon: '🔄', label: 'Transactions', route: '/transactions' }
       ]
     },
-    {
-      title: 'Analytics',
-      items: [
-        { icon: '📈', label: 'Team Stats', route: '/team-stats' },
-        { icon: '⚡', label: 'Sabermetrics', route: '/sabermetrics' },
-        { icon: '🎯', label: 'ELO Ratings', route: '/elo-ratings' }
-      ]
-    },
-    {
-      title: 'Raw Data',
-      items: [
-        { icon: '📋', label: 'Raw Game Data', route: '/raw-game-data' },
-        { icon: '💾', label: 'Raw Data', route: '/raw-data' }
-      ]
-    }
+    // {
+    //   title: 'Analytics',
+    //   items: [
+    //     { icon: '📈', label: 'Team Stats', route: '/team-stats' },
+    //     { icon: '⚡', label: 'Sabermetrics', route: '/sabermetrics' },
+    //     { icon: '🎯', label: 'ELO Ratings', route: '/elo-ratings' }
+    //   ]
+    // },
+    // {
+    //   title: 'Raw Data',
+    //   items: [
+    //     { icon: '📋', label: 'Raw Game Data', route: '/raw-game-data' },
+    //     { icon: '💾', label: 'Raw Data', route: '/raw-data' }
+    //   ]
+    // }
   ];
 
   activeItem: string = 'Home';
