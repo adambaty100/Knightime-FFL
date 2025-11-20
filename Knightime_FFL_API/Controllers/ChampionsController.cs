@@ -1,3 +1,4 @@
+using Knightime_FFL_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -55,6 +56,60 @@ namespace Knightime_FFL_API.Controllers
             }
 
             return Ok(championships);
+        }
+
+        [HttpPost("")]
+        public async Task<IActionResult> CreateChampion([FromBody] Champions champion)
+        {
+            if (champion == null)
+            {
+                return BadRequest("Champion data is required");
+            }
+
+            _context.Champions.Add(champion);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetChampions), new { id = champion.Id }, champion);
+        }
+
+        [HttpPatch("id/{id}")]
+        public async Task<IActionResult> UpdateChampion(long id, [FromBody] Champions champion)
+        {
+            if (champion == null)
+            {
+                return BadRequest("Champion data is required");
+            }
+
+            var existingChampion = await _context.Champions.FirstOrDefaultAsync(c => c.Id == id);
+
+            if (existingChampion == null)
+            {
+                return NotFound($"Champion with ID {id} not found");
+            }
+
+            existingChampion.LeagueMemberId = champion.LeagueMemberId;
+            existingChampion.Year = champion.Year;
+
+            _context.Champions.Update(existingChampion);
+            await _context.SaveChangesAsync();
+
+            return Ok(existingChampion);
+        }
+
+        [HttpDelete("id/{id}")]
+        public async Task<IActionResult> DeleteChampion(long id)
+        {
+            var champion = await _context.Champions.FirstOrDefaultAsync(c => c.Id == id);
+
+            if (champion == null)
+            {
+                return NotFound($"Champion with ID {id} not found");
+            }
+
+            _context.Champions.Remove(champion);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

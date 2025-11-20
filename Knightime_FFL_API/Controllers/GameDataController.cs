@@ -1,3 +1,4 @@
+using Knightime_FFL_API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -86,6 +87,65 @@ namespace Knightime_FFL_API.Controllers
             }
 
             return Ok(gameData);
+        }
+
+        [HttpPost("")]
+        public async Task<IActionResult> CreateGameData([FromBody] GameData gameData)
+        {
+            if (gameData == null)
+            {
+                return BadRequest("Game data is required");
+            }
+
+            _context.GameData.Add(gameData);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetGameDataById), new { id = gameData.Id }, gameData);
+        }
+
+        [HttpPatch("id/{id}")]
+        public async Task<IActionResult> UpdateGameData(long id, [FromBody] GameData gameData)
+        {
+            if (gameData == null)
+            {
+                return BadRequest("Game data is required");
+            }
+
+            var existingGameData = await _context.GameData.FirstOrDefaultAsync(g => g.Id == id);
+
+            if (existingGameData == null)
+            {
+                return NotFound($"Game data with ID {id} not found");
+            }
+
+            existingGameData.LeagueMemberId = gameData.LeagueMemberId;
+            existingGameData.PointsFor = gameData.PointsFor;
+            existingGameData.PointsAgainst = gameData.PointsAgainst;
+            existingGameData.WinLossTie = gameData.WinLossTie;
+            existingGameData.OpponentId = gameData.OpponentId;
+            existingGameData.Year = gameData.Year;
+            existingGameData.Week = gameData.Week;
+
+            _context.GameData.Update(existingGameData);
+            await _context.SaveChangesAsync();
+
+            return Ok(existingGameData);
+        }
+
+        [HttpDelete("id/{id}")]
+        public async Task<IActionResult> DeleteGameData(long id)
+        {
+            var gameData = await _context.GameData.FirstOrDefaultAsync(g => g.Id == id);
+
+            if (gameData == null)
+            {
+                return NotFound($"Game data with ID {id} not found");
+            }
+
+            _context.GameData.Remove(gameData);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

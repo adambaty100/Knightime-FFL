@@ -1,3 +1,4 @@
+using Knightime_FFL_API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -71,6 +72,61 @@ namespace Knightime_FFL_API.Controllers
             }
 
             return Ok(teamData);
+        }
+
+        [HttpPost("")]
+        public async Task<IActionResult> CreateTeamData([FromBody] TeamData teamData)
+        {
+            if (teamData == null)
+            {
+                return BadRequest("Team data is required");
+            }
+
+            _context.TeamData.Add(teamData);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetTeamDataById), new { id = teamData.Id }, teamData);
+        }
+
+        [HttpPatch("id/{id}")]
+        public async Task<IActionResult> UpdateTeamData(long id, [FromBody] TeamData teamData)
+        {
+            if (teamData == null)
+            {
+                return BadRequest("Team data is required");
+            }
+
+            var existingTeamData = await _context.TeamData.FirstOrDefaultAsync(t => t.Id == id);
+
+            if (existingTeamData == null)
+            {
+                return NotFound($"Team data with ID {id} not found");
+            }
+
+            existingTeamData.Year = teamData.Year;
+            existingTeamData.LeagueMemberId = teamData.LeagueMemberId;
+            existingTeamData.TeamName = teamData.TeamName;
+
+            _context.TeamData.Update(existingTeamData);
+            await _context.SaveChangesAsync();
+
+            return Ok(existingTeamData);
+        }
+
+        [HttpDelete("id/{id}")]
+        public async Task<IActionResult> DeleteTeamData(long id)
+        {
+            var teamData = await _context.TeamData.FirstOrDefaultAsync(t => t.Id == id);
+
+            if (teamData == null)
+            {
+                return NotFound($"Team data with ID {id} not found");
+            }
+
+            _context.TeamData.Remove(teamData);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
