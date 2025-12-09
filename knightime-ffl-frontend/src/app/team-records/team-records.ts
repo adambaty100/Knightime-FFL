@@ -73,6 +73,7 @@ export class TeamRecordsComponent implements OnInit {
   rawChampionsData: Champion[] = [];
   activeFilter: string = 'All Time';
   availableYears: number[] = [];
+  sinceYearFilter: number | null = null;
   isLoading: boolean = true;
   error: string | null = null;
   sortColumn: string = 'rank';
@@ -143,6 +144,8 @@ export class TeamRecordsComponent implements OnInit {
   private processTeamData(): void {
     if (this.activeFilter === 'All Time') {
       this.processAllTimeData();
+    } else if (this.activeFilter === 'All Time Yearly Averages') {
+      this.processAllTimeYearlyAverages();
     } else {
       this.processYearData(parseInt(this.activeFilter));
     }
@@ -202,6 +205,85 @@ export class TeamRecordsComponent implements OnInit {
           winPercentage: this.calculateWinPercentage(stats.wins, stats.losses),
           pointsFor: stats.pointsFor.toLocaleString(),
           pointsAgainst: stats.pointsAgainst.toLocaleString(),
+          championships: totalChampionships,
+          isChampion: false,
+          status: {
+            text: isActiveInMostRecentYear ? 'Active' : 'Inactive',
+            type: 'playoff' as const
+          }
+        };
+      });
+
+    // Fetch league member names for all teams
+    this.fetchLeagueMemberNames(teams);
+  }
+
+  private processAllTimeYearlyAverages(): void {
+    // Group by league member ID and calculate yearly averages
+    const leagueMemberMap = new Map<number, any>();
+
+    // Sort rawTeamData by year descending to get the most recent first
+    const sortedByYear = [...this.rawTeamData].sort((a, b) => b.year - a.year);
+
+    // Get the most recent year overall in the dataset
+    const mostRecentYearOverall = sortedByYear.length > 0 ? sortedByYear[0].year : 0;
+
+    sortedByYear.forEach(team => {
+      const memberId = team.leagueMemberId;
+      if (!leagueMemberMap.has(memberId)) {
+        // First occurrence is the most recent
+        leagueMemberMap.set(memberId, {
+          leagueMemberId: memberId,
+          teamName: team.teamName,
+          years: [team.year],
+          mostRecentYear: team.year
+        });
+      } else {
+        const existing = leagueMemberMap.get(memberId);
+        if (!existing.years.includes(team.year)) {
+          existing.years.push(team.year);
+        }
+      }
+    });
+
+    // Convert to array and sort by team name
+    const teams = Array.from(leagueMemberMap.values())
+      .sort((a, b) => a.teamName.localeCompare(b.teamName))
+      .map((team, index) => {
+        const initials = this.getInitials(team.teamName);
+        const stats = this.calculateStatsForMember(team.leagueMemberId);
+        
+        // Filter years based on sinceYearFilter
+        const yearsToCount = this.sinceYearFilter !== null
+          ? team.years.filter((y: number) => y >= this.sinceYearFilter!)
+          : team.years;
+        const yearCount = yearsToCount.length;
+        
+        // Calculate yearly averages
+        const avgWins = yearCount > 0 ? stats.wins / yearCount : 0;
+        const avgLosses = yearCount > 0 ? stats.losses / yearCount : 0;
+        const avgPointsFor = yearCount > 0 ? stats.pointsFor / yearCount : 0;
+        const avgPointsAgainst = yearCount > 0 ? stats.pointsAgainst / yearCount : 0;
+        
+        // Count total championships from the champions data
+        const totalChampionships = this.rawChampionsData.filter(
+          c => c.leagueMemberId === team.leagueMemberId
+        ).length;
+        
+        // Check if this member was active in the most recent year overall
+        const isActiveInMostRecentYear = team.mostRecentYear === mostRecentYearOverall;
+        
+        return {
+          rank: index + 1,
+          name: team.teamName,
+          avatar: initials,
+          leagueMemberId: team.leagueMemberId,
+          leagueMemberName: '',
+          wins: Math.round(avgWins * 10) / 10,
+          losses: Math.round(avgLosses * 10) / 10,
+          winPercentage: this.calculateWinPercentage(avgWins, avgLosses),
+          pointsFor: Math.round(avgPointsFor).toLocaleString(),
+          pointsAgainst: Math.round(avgPointsAgainst).toLocaleString(),
           championships: totalChampionships,
           isChampion: false,
           status: {
@@ -427,9 +509,27 @@ export class TeamRecordsComponent implements OnInit {
 
   onFilterClick(filter: string): void {
     this.activeFilter = filter;
+    this.sinceYearFilter = null;
     this.sortColumn = 'rank';
     this.sortDirection = 'asc';
     this.processTeamData();
+  }
+
+  onSinceYearChange(year: number | null): void {
+    this.sinceYearFilter = year;
+    this.sortColumn = 'rank';
+    this.sortDirection = 'asc';
+    this.processTeamData();
+  }
+
+  get sortedAvailableYears(): number[] {
+    return [...this.availableYears].sort((a, b) => a - b);
+  }
+
+  onSinceYearSelectChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    const value = target.value;
+    this.onSinceYearChange(value ? Number(value) : null);
   }
 
   onSort(column: string): void {

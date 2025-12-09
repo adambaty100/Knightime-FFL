@@ -8,6 +8,7 @@
         <div class="filters-wrapper">
             <div class="filters">
                 <button class="filter-btn" [class.active]="activeFilter === 'All Time'" (click)="onFilterClick('All Time')">All Time</button>
+                <button class="filter-btn" [class.active]="activeFilter === 'All Time Yearly Averages'" (click)="onFilterClick('All Time Yearly Averages')">All Time Yearly Averages</button>
                 <button *ngFor="let year of availableYears" class="filter-btn" [class.active]="activeFilter === year.toString()" (click)="onFilterClick(year.toString())">{{ year }}</button>
             </div>
         </div>
