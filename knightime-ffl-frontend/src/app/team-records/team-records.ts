@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { API_BASE_URL } from '../api.config';
 import { forkJoin } from 'rxjs';
 
 interface TeamRecord {
@@ -79,10 +80,10 @@ export class TeamRecordsComponent implements OnInit {
   sortColumn: string = 'rank';
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  private apiUrl = 'https://localhost:44372/teamdata';
-  private gameDataUrl = 'https://localhost:44372/gamedata';
-  private championsUrl = 'https://localhost:44372/champions';
-  private leagueMembersUrl = 'https://localhost:44372/leaguemembers/id';
+  private apiUrl = `${API_BASE_URL}/teamdata`;
+  private gameDataUrl = `${API_BASE_URL}/gamedata`;
+  private championsUrl = `${API_BASE_URL}/champions`;
+  private leagueMembersUrl = `${API_BASE_URL}/leaguemembers/id`;
   private leagueMemberCache = new Map<number, string>();
   private championsCache = new Map<number, Set<number>>();
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { API_BASE_URL } from '../api.config';
 import { forkJoin } from 'rxjs';
 
 interface TeamData {
@@ -59,7 +60,7 @@ export class GameDataComponent implements OnInit {
   isLoading: boolean = true;
   error: string | null = null;
 
-  private apiUrl = 'https://localhost:44372';
+  private apiUrl = API_BASE_URL;
   private leagueMemberCache = new Map<number, string>();
   private teamDataMap = new Map<number, TeamData[]>();
 

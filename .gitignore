@@ -1,2 +1,17 @@
 # Visual Studio
 .vs/
+
+# .NET build output from the retired API
+**/bin/
+**/obj/
+
+# Python
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+*.py[cod]
+.env
+
+# Local SQLite files
+*.db-shm
+*.db-wal

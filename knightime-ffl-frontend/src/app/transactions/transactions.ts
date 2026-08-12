@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { forkJoin, timeout, catchError } from 'rxjs';
 import { of } from 'rxjs';
+import { API_BASE_URL } from '../api.config';
 
 interface Transaction {
   id: number;
@@ -45,7 +46,7 @@ export class TransactionsComponent implements OnInit {
   isLoading = true;
   error: string | null = null;
 
-  private apiUrl = 'https://localhost:44372';
+  private apiUrl = API_BASE_URL;
   private leagueMembersCache: Map<number, string> = new Map();
 
   constructor(private http: HttpClient) {}

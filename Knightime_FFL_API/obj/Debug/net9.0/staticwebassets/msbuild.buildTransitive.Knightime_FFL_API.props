@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../buildMultiTargeting/Knightime_FFL_API.props" />
-</Project>

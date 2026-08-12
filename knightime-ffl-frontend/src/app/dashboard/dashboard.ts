@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import { StatCardComponent } from '../stat-card/stat-card';
+import { API_BASE_URL } from '../api.config';
 
 interface StatsData {
   totalTeams: number;
@@ -29,7 +30,7 @@ export class DashboardComponent implements OnInit {
   isLoading: boolean = true;
   error: string | null = null;
 
-  private apiUrl = 'https://localhost:44372';
+  private apiUrl = API_BASE_URL;
 
   constructor(private http: HttpClient, private router: Router) {}
 

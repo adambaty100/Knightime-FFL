@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../build/Knightime_FFL_API.props" />
-</Project>

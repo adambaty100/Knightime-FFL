@@ -1,0 +1,28 @@
+[project]
+name = "knightime-ffl-api"
+version = "1.0.0"
+description = "FastAPI backend for Knightime FFL"
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+    "fastapi[standard-no-fastapi-cloud-cli]>=0.116,<1",
+    "libsql>=0.1.11,<0.2",
+    "python-dotenv>=1,<2",
+]
+
+[dependency-groups]
+dev = [
+    "httpx2>=2.9,<3",
+    "pytest>=8,<10",
+]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.fastapi]
+entrypoint = "app.main:app"
