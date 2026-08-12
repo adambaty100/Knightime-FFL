@@ -29,7 +29,20 @@ npm start
 ```
 
 Open `http://localhost:4200`. The frontend API base URL is defined in
-`src/app/api.config.ts`.
+`src/app/api.config.ts` and uses local port 8000 by default.
+
+## Vercel deployment
+
+Deploy the API and frontend as separate Vercel projects using their respective folders
+as project root directories. On the frontend project, set:
+
+```dotenv
+PUBLIC_API_BASE_URL=https://your-deployed-api.vercel.app
+```
+
+After the frontend receives its production URL, set that URL as `CORS_ORIGINS` on the
+backend project and redeploy the backend. Detailed project settings and verification
+commands are in each project's README.
 
 ## Tests
 

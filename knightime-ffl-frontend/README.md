@@ -1,4 +1,52 @@
-# KnightimeFflFrontend
+# Knightime FFL Frontend
+
+Angular frontend for the Knightime FFL application.
+
+## Local development
+
+Start the FastAPI service on port 8000, then run:
+
+```bash
+npm ci
+npm start
+```
+
+The frontend automatically uses the same hostname as the browser with API port 8000,
+so both `localhost:4200` and `127.0.0.1:4200` work locally.
+
+## Deploy to Vercel
+
+Create a second Vercel project from this repository with these settings:
+
+- **Root Directory:** `knightime-ffl-frontend`
+- **Framework Preset:** Angular
+- **Build Command:** `npm run build`
+- **Output Directory:** `dist/knightime-ffl-frontend/browser`
+
+The checked-in `vercel.json` supplies the build and output settings. If the Vercel
+dashboard has overrides enabled, make them match these values or disable the overrides.
+
+Set this environment variable for both **Preview** and **Production**:
+
+```dotenv
+PUBLIC_API_BASE_URL=https://your-deployed-api.vercel.app
+```
+
+Use the FastAPI deployment URL without a trailing path such as `/docs`. The build
+normalizes a trailing slash. Vercel builds intentionally fail if this variable is
+missing or does not use HTTPS, preventing a frontend deployment that silently calls
+port 8000.
+
+The build generates `public/runtime-config.js`; this file is ignored by Git and copied
+into the Angular bundle. Do not place `ADMIN_API_KEY` or either Turso credential in the
+frontend project—those are backend-only secrets.
+
+The included `vercel.json` sends non-file routes to Angular's `index.html`, allowing
+direct visits and refreshes on `/teams`, `/games`, and `/transactions`.
+
+After the frontend deploys, add its production URL to the backend Vercel project's
+`CORS_ORIGINS`. Vercel Preview URLs already match the backend's restricted Preview
+origin policy. Redeploy the backend after changing that variable.
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
 
