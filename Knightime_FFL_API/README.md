@@ -72,10 +72,11 @@ and Production environments.
 Create a Vercel project from this repository with these settings:
 
 - **Root Directory:** `Knightime_FFL_API`
-- **Framework Preset:** FastAPI (automatic detection should select it)
+- **Framework Preset:** FastAPI
 - **Build and Output settings:** leave at their defaults
 
-The root `index.py` exports the FastAPI application for Vercel's Python runtime.
+The checked-in `vercel.json` explicitly selects the FastAPI framework and an eastern US
+function region. The root `index.py` exports the FastAPI application for Vercel's Python runtime.
 Dependencies and Python 3.12–3.14 compatibility are defined in `pyproject.toml` and
 `uv.lock`.
 
